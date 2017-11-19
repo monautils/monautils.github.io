@@ -71,7 +71,6 @@
 				document.getElementById('vout').value = obj.vout
 				document.getElementById('amount').value = obj.sendamount
 				document.getElementById('address').value = obj.address
-
 			}).catch(function(e){
 				document.getElementById('message').innerText = e.message
 		    })
@@ -96,6 +95,7 @@
 				tx.sign(0, keypair)
 				var rawtx = tx.build().toHex()
 				document.getElementById('output').value = rawtx;
+				document.getElementById('message').innerText = "https://mona.insight.monaco-ex.org/insight/tx/send"
 			} catch(err) {
 				var message = "error: " + err.message
 				document.getElementById('message').innerText = message
@@ -120,8 +120,8 @@
 			<div class="col-md-4">
 				<label for="txid">トランザクションID:</label>
 				<input class="form-control" id="txid" size="40" value=""/>
-				<label id="fee"></label>
-				<label id="org_amount"></label>
+				<label id="fee"></label><br/>
+				<label id="org_amount"></label><br/>
 
 			</div>
 
@@ -147,8 +147,8 @@
 			</div>
 		</div>
 		
-		<label id="message"></label>
-		<textarea id="output" cols="100" rows="5"></textarea>
+		<label id="message"></label><br/>
+		<textarea id="output" cols="100" rows="5"></textarea><br/>
 
 	</div>
 </html>
