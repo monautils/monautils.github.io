@@ -1,0 +1,118 @@
+<html>
+	<head>
+		<title>txbuilder</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	</head>
+	
+
+	<script src='bitcoinjs.min.js'></script>
+	<script type="text/javascript">
+
+
+		var network = { hashGenesisBlock: 'ff9f1c0116d19de7c9963845e129f9ed1bfc0b376eb54fd7afa42e0d418c8bb6',
+		  port: 9401,
+		  portRpc: 9402,
+		  protocol: { magic: 3686187259 },
+		  seedsDns: [ 'dnsseed.monacoin.org' ],
+		  versions:
+		   { bip32: { private: 76066276, public: 76067358 },
+		     bip44: 22,
+		     private: 178,
+		     public: 50,
+		     scripthash: 55,
+		     scripthash2: 5 },
+		  name: 'Monacoin',
+		  unit: 'MONA',
+		  testnet: false,
+		  messagePrefix: '',
+		  bip32: { public: 76067358, private: 76066276 },
+		  pubKeyHash: 50,
+		  scriptHash: 55,
+		  wif: 178,
+		  dustThreshold: null }
+		var newnetwork = { hashGenesisBlock: 'ff9f1c0116d19de7c9963845e129f9ed1bfc0b376eb54fd7afa42e0d418c8bb6',
+		  port: 9401,
+		  portRpc: 9402,
+		  protocol: { magic: 3686187259 },
+		  seedsDns: [ 'dnsseed.monacoin.org' ],
+		  versions:
+		   { bip32: { private: 76066276, public: 76067358 },
+		     bip44: 22,
+		     private: 178,
+		     public: 50,
+		     scripthash: 55,
+		     scripthash2: 5 },
+		  name: 'Monacoin',
+		  unit: 'MONA',
+		  testnet: false,
+		  messagePrefix: '',
+		  bip32: { public: 76067358, private: 76066276 },
+		  pubKeyHash: 50,
+		  scriptHash: 55,
+		  wif: 176,
+		  dustThreshold: null }
+		function old_to_new(wif){
+			var keypair = bitcoin.ECPair.fromWIF(wif, network);
+			keypair.network = newnetwork
+			var message = {
+				address : keypair.getAddress(),
+				wif_b0 : keypair.toWIF(),
+			}
+			return message
+		}
+		function new_to_old(wif){
+			var keypair = bitcoin.ECPair.fromWIF(wif, newnetwork);
+			keypair.network = network
+			var message = {
+				address : keypair.getAddress(),
+				wif_b2 : keypair.toWIF(),
+			}
+			return message
+		}
+
+		function convert() {
+		
+			try {
+				var wif = document.getElementById('wif').value;
+				try{
+					var message = old_to_new(wif);
+					document.getElementById('message').innerText = JSON.stringify(message)
+				}catch(e){
+					var message = new_to_old(wif);
+					document.getElementById('message').innerText = JSON.stringify(message)
+				}
+			} catch(err) {
+				var message = "error: " + err.message
+				document.getElementById('message').innerText = message
+			}
+
+
+		}
+	</script>
+		<div class="container">
+<nav class="navbar navbar-default">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">txbuilder</a>
+    </div>
+   
+
+</nav>
+
+
+		<div class="form-group row">
+			<div class="col-md-4">
+				<label for="vout">秘密鍵:</label>
+				<input class="form-control" id="wif" size="40" value=""/>
+
+			</div>
+			<div class="col-md-12">
+				<button class="btn btn-primary" type="button" onclick="convert();" style="margin-top: 4px">Convert</button>
+			</div>
+		</div>
+		
+		<label id="message"></label><br/>
+
+	</div>
+</html>
